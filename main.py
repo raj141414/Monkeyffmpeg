@@ -13,35 +13,38 @@ from p_bar import progress_bar
 from subprocess import getstatusoutput
 from aiohttp import ClientSession
 import helper
-from logger import logging
 import time
 import asyncio
 from pyrogram.types import User, Message
 import sys
 import re
 import os
+from details import api_id, api_hash, bot_token, sudo_groups
 
-bot = Client("bot",
-             bot_token= "6133434192:AAHDkrhW9sgqzLU3ay4o7GRy_yPyDuWJdIc",
-             api_id= 27495136,
-             api_hash= "4ccc4865eec4d8fde7530e71948b3424")
+bot = Client(
+
+    "bot",
+    api_id=api_id,
+    api_hash=api_hash,
+    bot_token=bot_token)
+
 
 
 @bot.on_message(filters.command(["start"]))
 async def account_login(bot: Client, m: Message):
-    editable = await m.reply_text(f"Hello [{m.from_user.first_name}](tg://user?id={m.from_user.id})\nPress /covid")
+    editable = await m.reply_text(f"Hello [{m.from_user.first_name}](tg://user?id={m.from_user.id})\nPress /tor")
 
 
-@bot.on_message(filters.command("stop"))
+@bot.on_message(filters.command("restart"))
 async def restart_handler(_, m):
     await m.reply_text("**STOPPED**🚦", True)
     os.execl(sys.executable, sys.executable, *sys.argv)
 
 
 
-@bot.on_message(filters.command(["covid"]))
+@bot.on_message(filters.command(["tor"]))
 async def account_login(bot: Client, m: Message):
-    editable = await m.reply_text('Send TXT file for download')
+    editable = await m.reply_text('Send links listed in a txt file in format **Name:link')
     input: Message = await bot.listen(editable.chat.id)
     x = await input.download()
     await input.delete(True)
@@ -162,8 +165,8 @@ async def account_login(bot: Client, m: Message):
 
             try:  
                 
-                cc = f'**Vid_id  »** {str(count).zfill(3)}\n**Title  »** {name1} {res} {MR}.mkv\n**Batch »** {raw_text0}\n\n'
-                cc1 = f'**Vid_id  »** {str(count).zfill(3)}\n**Title »** {name1} {MR}.pdf \n**Batch »** {raw_text0}\n\n'
+                cc = f'**Index  »** {str(count).zfill(3)}\n**Title  »** {name1} {res} {MR}.mkv\n**Batch Name »** {raw_text0}\n\n**Downloaded By:** XEÑÓMÔRPH❤️'
+                cc1 = f'**Index  »** {str(count).zfill(3)}\n**Title »** {name1} {MR}.pdf \n**Batch Name »** {raw_text0}\n\n**Downloaded By:** XEÑÓMÔRPH❤️'
                 if "drive" in url:
                     try:
                         ka = await helper.download(url, name)
@@ -200,7 +203,7 @@ async def account_login(bot: Client, m: Message):
 
             except Exception as e:
                 await m.reply_text(
-                    f"**downloading failed 🥺**\n{str(e)}\n**Name** - {name}\n**Link** - `{url}`"
+                    await m.reply_text(f"**downloading failed **\n{str(e)}\n**Name** - {name}\n**Link** - `{url}`\n\n**With ❤️ XEÑÓMÔRPH**")
                 )
                 continue
 
